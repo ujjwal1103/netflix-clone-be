@@ -34,10 +34,14 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     await user.save();
 
     const { accessToken, refreshToken } = generateTokens(user);
-    res.cookie("accessToken", accessToken, cookieOptions);
+    res.cookie("accessToken", accessToken, {
+      ...cookieOptions,
+      sameSite: "none",
+    });
     res.cookie("refreshToken", refreshToken, {
       ...cookieOptions,
       maxAge: 604800000, // 7 days for refresh tokens
+      sameSite: "none",
     });
     res.status(201).json({ user });
   } catch (error: any) {

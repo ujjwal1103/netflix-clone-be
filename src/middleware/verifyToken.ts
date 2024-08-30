@@ -52,7 +52,10 @@ export const verifyToken = async (
 
           const newAccessToken = user.generateAuthToken();
           req.user = decodedRefresh;
-          res.cookie("accessToken", newAccessToken, cookieOptions);
+          res.cookie("accessToken", newAccessToken, {
+            ...cookieOptions,
+            sameSite: "none",
+          });
 
           return next();
         } catch (refreshError) {
